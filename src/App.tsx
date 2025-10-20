@@ -9,6 +9,18 @@ import { getInitialState, saveToLocalStorage } from './utils/storage';
 
 function App() {
   const [state, setState] = useState<ChampionshipState>(getInitialState());
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     saveToLocalStorage(state);
@@ -36,6 +48,18 @@ function App() {
   };
 
   const driverStandings = calculateAllDriverPoints(state.raceResults);
+
+  if (isMobile) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="text-6xl mb-4">😢</div>
+          <h1 className="text-2xl font-bold mb-2">No mobile version yet</h1>
+          <p className="text-lg text-gray-600">Please use web!</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8 pb-32">
