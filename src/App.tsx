@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ResultsBar } from './components/ResultsBar';
 import { RaceColumn } from './components/RaceColumn';
+import { Footer } from './components/Footer';
 import { RACES } from './constants';
 import { ChampionshipState, DriverName, RaceResult } from './types';
 import { calculateAllDriverPoints } from './utils/points';
@@ -37,7 +38,7 @@ function App() {
   const driverStandings = calculateAllDriverPoints(state.raceResults);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8 pb-32">
       <div className="max-w-[1800px] mx-auto">
         <ResultsBar drivers={driverStandings} />
 
@@ -56,6 +57,7 @@ function App() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
