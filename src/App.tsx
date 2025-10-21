@@ -3,27 +3,12 @@ import { ResultsBar } from './components/ResultsBar';
 import { RaceColumn } from './components/RaceColumn';
 import { Footer } from './components/Footer';
 import { RACES } from './constants';
-import { ChampionshipState, DriverName, RaceResult, Race } from './types';
+import { ChampionshipState, DriverName, RaceResult } from './types';
 import { calculateAllDriverPoints } from './utils/points';
 import { getInitialState, saveToLocalStorage } from './utils/storage';
-import { decodeScenario, encodeScenario, copyToClipboard } from './utils/shareUrl';
 
 function App() {
-  const [state, setState] = useState<ChampionshipState>(() => {
-    const decodedRaces = decodeScenario(RACES);
-    if (decodedRaces) {
-      const raceResults: RaceResult = {};
-      decodedRaces.forEach(race => {
-        raceResults[race.id] = {
-          'Max': race.positions[0],
-          'Lando': race.positions[1],
-          'Oscar': race.positions[2],
-        };
-      });
-      return { raceResults };
-    }
-    return getInitialState();
-  });
+  const [state, setState] = useState<ChampionshipState>(getInitialState());
   const [isMobile, setIsMobile] = useState(false);
   const [isPortrait, setIsPortrait] = useState(false);
 
@@ -72,19 +57,6 @@ function App() {
 
   const driverStandings = calculateAllDriverPoints(state.raceResults);
 
-  const handleShare = async () => {
-    const races = RACES.map(race => ({
-      ...race,
-      positions: [
-        state.raceResults[race.id]?.['Max'] ?? 1,
-        state.raceResults[race.id]?.['Lando'] ?? 2,
-        state.raceResults[race.id]?.['Oscar'] ?? 3,
-      ]
-    }));
-    const url = encodeScenario(races);
-    await copyToClipboard(url);
-  };
-
   if (isMobile && isPortrait) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-8">
@@ -100,7 +72,7 @@ function App() {
   return (
     <div className={`min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 ${isMobile ? 'p-2 pb-4' : 'p-8 pb-32'}`}>
       <div className="max-w-[1800px] mx-auto">
-        <ResultsBar drivers={driverStandings} isMobile={isMobile} onShare={handleShare} />
+        <ResultsBar drivers={driverStandings} isMobile={isMobile} />
 
         <div className={`bg-white rounded-lg shadow-md ${isMobile ? 'p-2' : 'p-6'}`}>
           <div className={isMobile ? '' : 'overflow-x-auto'}>
