@@ -8,14 +8,19 @@ interface RaceColumnProps {
   race: Race;
   raceResults: RaceResult;
   onPositionChange: (raceId: string, driverName: DriverName, newPosition: number | null) => void;
+  isMobile?: boolean;
 }
 
-export function RaceColumn({ race, raceResults, onPositionChange }: RaceColumnProps) {
+export function RaceColumn({ race, raceResults, onPositionChange, isMobile = false }: RaceColumnProps) {
   const [draggedDriver, setDraggedDriver] = useState<{
     name: DriverName;
     fromPosition: number;
   } | null>(null);
   const [dragOverPosition, setDragOverPosition] = useState<number | null>(null);
+  const [selectedDriver, setSelectedDriver] = useState<{
+    name: DriverName;
+    fromPosition: number;
+  } | null>(null);
 
   const currentResults = raceResults[race.id] || {};
 
@@ -72,7 +77,92 @@ export function RaceColumn({ race, raceResults, onPositionChange }: RaceColumnPr
     }
   };
 
+  const handleMobileTap = (position: number) => {
+    if (!isMobile) return;
+
+    const driverAtPosition = getDriverAtPosition(position);
+
+    if (selectedDriver) {
+      if (selectedDriver.fromPosition === position) {
+        setSelectedDriver(null);
+        return;
+      }
+
+      const driverAtTarget = getDriverAtPosition(position);
+
+      if (driverAtTarget && driverAtTarget !== selectedDriver.name) {
+        onPositionChange(race.id, driverAtTarget, selectedDriver.fromPosition);
+      }
+
+      onPositionChange(race.id, selectedDriver.name, position);
+      setSelectedDriver(null);
+    } else if (driverAtPosition) {
+      setSelectedDriver({ name: driverAtPosition, fromPosition: position });
+    }
+  };
+
   const positions = Array.from({ length: GRID_POSITIONS }, (_, i) => i + 1);
+
+  const getAbbreviatedName = (name: string) => {
+    if (!isMobile) return name;
+
+    const abbrevMap: { [key: string]: string } = {
+      'MEXICO': 'MEX',
+      'BRAZIL (SPRINT)': 'BRA (SP)',
+      'BRAZIL': 'BRA',
+      'LAS VEGAS': 'LV',
+      'QATAR (SPRINT)': 'QAT (SP)',
+      'QATAR': 'QAT',
+      'ABU DHABI': 'ABU',
+    };
+
+    return abbrevMap[name] || name;
+  };
+
+  if (isMobile) {
+    return (
+      <div className="bg-white rounded shadow-sm flex-1 min-w-0">
+        <h2 className="text-center font-bold text-[10px] py-1 border-b border-gray-200">
+          {getAbbreviatedName(race.name)}
+        </h2>
+        <div className="space-y-[2px] p-1">
+          {positions.slice(0, 10).map(position => {
+            const driver = getDriverAtPosition(position);
+            const driverData = driver ? DRIVERS.find(d => d.name === driver) : null;
+            const points = driver ? getPointsForPosition(position, race.type) : 0;
+            const isSelected = selectedDriver?.name === driver && selectedDriver?.fromPosition === position;
+
+            return (
+              <div
+                key={position}
+                onClick={() => handleMobileTap(position)}
+                className={`flex items-center gap-[2px] min-h-[24px] rounded transition-all cursor-pointer ${
+                  isSelected ? 'ring-2 ring-blue-500' : ''
+                }`}
+              >
+                <div className="w-4 text-center text-[10px] font-medium text-gray-600">
+                  {position}
+                </div>
+                <div className="flex-1 min-w-0">
+                  {driver && driverData ? (
+                    <div
+                      className="px-1 py-[2px] rounded text-[10px] font-semibold text-gray-900 flex items-center justify-between"
+                      style={{ backgroundColor: driverData.color }}
+                    >
+                      <span className="truncate">{driver.toUpperCase()}</span>
+                      <span className="text-[9px] ml-1">{points}</span>
+                    </div>
+                  ) : (
+                    <div className="h-[20px] bg-gray-100 rounded"></div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 min-w-[180px]">

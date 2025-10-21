@@ -10,10 +10,12 @@ import { getInitialState, saveToLocalStorage } from './utils/storage';
 function App() {
   const [state, setState] = useState<ChampionshipState>(getInitialState());
   const [isMobile, setIsMobile] = useState(false);
+  const [isPortrait, setIsPortrait] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
+      setIsPortrait(window.innerHeight > window.innerWidth);
     };
 
     checkMobile();
@@ -49,39 +51,40 @@ function App() {
 
   const driverStandings = calculateAllDriverPoints(state.raceResults);
 
-  if (isMobile) {
+  if (isMobile && isPortrait) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-8">
         <div className="text-center">
-          <div className="text-6xl mb-4">😢</div>
-          <h1 className="text-2xl font-bold mb-2">No mobile version yet</h1>
-          <p className="text-lg text-gray-600">Please use web!</p>
+          <div className="text-6xl mb-4">📱</div>
+          <h1 className="text-2xl font-bold mb-2">Please rotate your phone</h1>
+          <p className="text-lg text-gray-600">for the best experience 📱↔️</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8 pb-32">
+    <div className={`min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 ${isMobile ? 'p-2 pb-4' : 'p-8 pb-32'}`}>
       <div className="max-w-[1800px] mx-auto">
-        <ResultsBar drivers={driverStandings} />
+        <ResultsBar drivers={driverStandings} isMobile={isMobile} />
 
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="overflow-x-auto">
-            <div className="flex gap-4 pb-4">
+        <div className={`bg-white rounded-lg shadow-md ${isMobile ? 'p-2' : 'p-6'}`}>
+          <div className={isMobile ? '' : 'overflow-x-auto'}>
+            <div className={`flex ${isMobile ? 'gap-1' : 'gap-4 pb-4'}`}>
               {RACES.map(race => (
                 <RaceColumn
                   key={race.id}
                   race={race}
                   raceResults={state.raceResults}
                   onPositionChange={handlePositionChange}
+                  isMobile={isMobile}
                 />
               ))}
             </div>
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer isMobile={isMobile} />
     </div>
   );
 }

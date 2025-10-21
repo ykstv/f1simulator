@@ -1,6 +1,10 @@
 import React from 'react';
 
-export function Footer() {
+interface FooterProps {
+  isMobile?: boolean;
+}
+
+export function Footer({ isMobile = false }: FooterProps) {
   const handleTipClick = () => {
     window.open('https://revolut.me/ykostiv', '_blank', 'noopener,noreferrer');
   };
@@ -8,6 +12,40 @@ export function Footer() {
   const handleContactClick = () => {
     window.location.href = 'mailto:kostiv.yuriy@gmail.com';
   };
+
+  if (isMobile) {
+    return (
+      <footer className="bg-white border-t border-gray-200 shadow-lg mt-4">
+        <div className="px-2 py-3">
+          <div className="flex flex-col gap-3">
+            <div>
+              <h3 className="font-bold text-xs mb-1">F1 Championship Scenarios</h3>
+              <p className="text-[10px] text-gray-600 leading-tight">
+                Over 951 trillion ways this championship could end.
+                Skip the math — tap, select, and see who takes the crown. 👑
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleTipClick}
+                className="flex-1 px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded text-xs"
+              >
+                ☕ Tip
+              </button>
+
+              <button
+                onClick={handleContactClick}
+                className="flex-1 px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded text-xs"
+              >
+                Contact
+              </button>
+            </div>
+          </div>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
