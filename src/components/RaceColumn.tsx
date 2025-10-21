@@ -126,7 +126,7 @@ export function RaceColumn({ race, raceResults, onPositionChange, isMobile = fal
           {getAbbreviatedName(race.name)}
         </h2>
         <div className="space-y-[2px] p-1">
-          {positions.slice(0, 10).map(position => {
+          {positions.map(position => {
             const driver = getDriverAtPosition(position);
             const driverData = driver ? DRIVERS.find(d => d.name === driver) : null;
             const points = driver ? getPointsForPosition(position, race.type) : 0;
