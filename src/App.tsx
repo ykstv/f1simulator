@@ -15,9 +15,9 @@ function App() {
       const raceResults: RaceResult = {};
       decodedRaces.forEach(race => {
         raceResults[race.id] = {
-          'Max Verstappen': race.positions[0],
-          'Lando Norris': race.positions[1],
-          'Oscar Piastri': race.positions[2],
+          'Max': race.positions[0],
+          'Lando': race.positions[1],
+          'Oscar': race.positions[2],
         };
       });
       return { raceResults };
@@ -76,9 +76,9 @@ function App() {
     const races = RACES.map(race => ({
       ...race,
       positions: [
-        state.raceResults[race.id]?.['Max Verstappen'] ?? race.positions[0],
-        state.raceResults[race.id]?.['Lando Norris'] ?? race.positions[1],
-        state.raceResults[race.id]?.['Oscar Piastri'] ?? race.positions[2],
+        state.raceResults[race.id]?.['Max'] ?? 1,
+        state.raceResults[race.id]?.['Lando'] ?? 2,
+        state.raceResults[race.id]?.['Oscar'] ?? 3,
       ]
     }));
     const url = encodeScenario(races);
