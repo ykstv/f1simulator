@@ -14,14 +14,20 @@ function App() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth < 1024;
+      setIsMobile(isTouchDevice && isSmallScreen);
       setIsPortrait(window.innerHeight > window.innerWidth);
     };
 
     checkMobile();
     window.addEventListener('resize', checkMobile);
+    window.addEventListener('orientationchange', checkMobile);
 
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('orientationchange', checkMobile);
+    };
   }, []);
 
   useEffect(() => {
