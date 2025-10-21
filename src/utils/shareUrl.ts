@@ -19,11 +19,7 @@ export function encodeScenario(races: Race[]): string {
   const json = JSON.stringify(payload);
   const compressed = compressToEncodedURIComponent(json);
 
-  const url = new URL(window.location.href);
-  url.search = '';
-  url.searchParams.set('s', compressed);
-
-  return url.toString();
+  return `https://ykstv.com/?s=${compressed}`;
 }
 
 export function decodeScenario(currentSchedule: Race[]): Race[] | null {
