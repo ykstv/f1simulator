@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Share2 } from 'lucide-react';
+import React from 'react';
 
 interface ResultsBarProps {
   drivers: Array<{
@@ -8,18 +7,10 @@ interface ResultsBarProps {
     totalPoints: number;
   }>;
   isMobile?: boolean;
-  onShare?: () => void;
 }
 
-export function ResultsBar({ drivers, isMobile = false, onShare }: ResultsBarProps) {
+export function ResultsBar({ drivers, isMobile = false }: ResultsBarProps) {
   const firstPlacePoints = drivers[0]?.totalPoints || 0;
-  const [showToast, setShowToast] = useState(false);
-
-  const handleShare = () => {
-    onShare?.();
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-  };
 
   if (isMobile) {
     return (
@@ -52,20 +43,7 @@ export function ResultsBar({ drivers, isMobile = false, onShare }: ResultsBarPro
               );
             })}
           </div>
-          <button
-            onClick={handleShare}
-            className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-150 whitespace-nowrap"
-            title="Share scenario"
-          >
-            <Share2 size={12} />
-            Share
-          </button>
         </div>
-        {showToast && (
-          <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg shadow-lg text-xs z-50 animate-fade-in">
-            Link copied! Send it to a friend to view this scenario.
-          </div>
-        )}
       </div>
     );
   }
@@ -100,20 +78,7 @@ export function ResultsBar({ drivers, isMobile = false, onShare }: ResultsBarPro
             );
           })}
         </div>
-        <button
-          onClick={handleShare}
-          className="flex items-center gap-2 px-4 py-3 text-base font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-150 whitespace-nowrap"
-          title="Share scenario"
-        >
-          <Share2 size={18} />
-          Share
-        </button>
       </div>
-      {showToast && (
-        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg text-base z-50 animate-fade-in">
-          Link copied! Send it to a friend to view this scenario.
-        </div>
-      )}
     </div>
   );
 }
