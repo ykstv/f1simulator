@@ -79,16 +79,16 @@ export function ResultsBar({ drivers, isMobile = false, onShareClick }: ResultsB
               </div>
             );
           })}
+          {onShareClick && (
+            <button
+              onClick={onShareClick}
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium whitespace-nowrap"
+            >
+              <Share2 size={20} />
+              <span>Share</span>
+            </button>
+          )}
         </div>
-        {onShareClick && (
-          <button
-            onClick={onShareClick}
-            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium whitespace-nowrap"
-          >
-            <Share2 size={20} />
-            <span>Share</span>
-          </button>
-        )}
       </div>
     </div>
   );
