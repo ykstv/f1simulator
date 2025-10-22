@@ -3,6 +3,7 @@ import { ResultsBar } from './components/ResultsBar';
 import { RaceColumn } from './components/RaceColumn';
 import { Footer } from './components/Footer';
 import { ShareModal } from './components/ShareModal';
+import { Toast } from './components/Toast';
 import { RACES } from './constants';
 import { ChampionshipState, DriverName, RaceResult } from './types';
 import { calculateAllDriverPoints } from './utils/points';
@@ -14,6 +15,7 @@ function App() {
   const [isMobile, setIsMobile] = useState(false);
   const [isPortrait, setIsPortrait] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -64,6 +66,14 @@ function App() {
     setShowShareModal(true);
   };
 
+  const handleCopySuccess = () => {
+    setToast({ message: 'URL copied to clipboard!', type: 'success' });
+  };
+
+  const handleCopyError = () => {
+    setToast({ message: 'Failed to copy URL. Please try again.', type: 'error' });
+  };
+
   const shareUrl = generateShareUrl(state.raceResults);
 
   if (isMobile && isPortrait) {
@@ -105,7 +115,19 @@ function App() {
       </div>
       <Footer isMobile={isMobile} />
       {showShareModal && (
-        <ShareModal url={shareUrl} onClose={() => setShowShareModal(false)} />
+        <ShareModal
+          url={shareUrl}
+          onClose={() => setShowShareModal(false)}
+          onCopySuccess={handleCopySuccess}
+          onCopyError={handleCopyError}
+        />
+      )}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
       )}
     </div>
   );

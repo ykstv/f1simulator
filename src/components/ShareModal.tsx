@@ -1,11 +1,27 @@
-import { X } from 'lucide-react';
+import { X, Copy } from 'lucide-react';
+import { copyToClipboard } from '../utils/clipboard';
 
 interface ShareModalProps {
   url: string;
   onClose: () => void;
+  onCopySuccess: () => void;
+  onCopyError: () => void;
 }
 
-export function ShareModal({ url, onClose }: ShareModalProps) {
+export function ShareModal({ url, onClose, onCopySuccess, onCopyError }: ShareModalProps) {
+  const handleCopy = async () => {
+    const success = await copyToClipboard(url);
+
+    if (success) {
+      onCopySuccess();
+      setTimeout(() => {
+        onClose();
+      }, 300);
+    } else {
+      onCopyError();
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
@@ -40,12 +56,19 @@ export function ShareModal({ url, onClose }: ShareModalProps) {
           />
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
           >
             Close
+          </button>
+          <button
+            onClick={handleCopy}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+          >
+            <Copy size={18} />
+            Copy URL
           </button>
         </div>
       </div>
