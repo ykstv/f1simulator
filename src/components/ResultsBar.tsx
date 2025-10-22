@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Share2 } from 'lucide-react';
 
 interface ResultsBarProps {
   drivers: Array<{
@@ -7,10 +8,18 @@ interface ResultsBarProps {
     totalPoints: number;
   }>;
   isMobile?: boolean;
+  onShare?: () => void;
 }
 
-export function ResultsBar({ drivers, isMobile = false }: ResultsBarProps) {
+export function ResultsBar({ drivers, isMobile = false, onShare }: ResultsBarProps) {
   const firstPlacePoints = drivers[0]?.totalPoints || 0;
+  const [showToast, setShowToast] = useState(false);
+
+  const handleShare = () => {
+    onShare?.();
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
   if (isMobile) {
     return (
@@ -43,7 +52,20 @@ export function ResultsBar({ drivers, isMobile = false }: ResultsBarProps) {
               );
             })}
           </div>
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-1 px-2 py-1 text-xs font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-md transition-all duration-150 whitespace-nowrap shadow-sm"
+            title="Share scenario"
+          >
+            <Share2 size={12} />
+            Share
+          </button>
         </div>
+        {showToast && (
+          <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg shadow-lg text-xs z-50 animate-fade-in">
+            Link copied! Send it to a friend to view this scenario.
+          </div>
+        )}
       </div>
     );
   }
@@ -78,7 +100,20 @@ export function ResultsBar({ drivers, isMobile = false }: ResultsBarProps) {
             );
           })}
         </div>
+        <button
+          onClick={handleShare}
+          className="flex items-center gap-2 px-4 py-3 text-base font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 whitespace-nowrap"
+          title="Share scenario"
+        >
+          <Share2 size={18} />
+          Share
+        </button>
       </div>
+      {showToast && (
+        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg text-base z-50 animate-fade-in">
+          Link copied! Send it to a friend to view this scenario.
+        </div>
+      )}
     </div>
   );
 }
