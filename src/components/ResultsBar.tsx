@@ -1,4 +1,5 @@
 import React from 'react';
+import { Share2 } from 'lucide-react';
 
 interface ResultsBarProps {
   drivers: Array<{
@@ -7,9 +8,10 @@ interface ResultsBarProps {
     totalPoints: number;
   }>;
   isMobile?: boolean;
+  onShareClick?: () => void;
 }
 
-export function ResultsBar({ drivers, isMobile = false }: ResultsBarProps) {
+export function ResultsBar({ drivers, isMobile = false, onShareClick }: ResultsBarProps) {
   const firstPlacePoints = drivers[0]?.totalPoints || 0;
 
   if (isMobile) {
@@ -78,6 +80,15 @@ export function ResultsBar({ drivers, isMobile = false }: ResultsBarProps) {
             );
           })}
         </div>
+        {onShareClick && (
+          <button
+            onClick={onShareClick}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap"
+          >
+            <Share2 size={20} />
+            <span>Share</span>
+          </button>
+        )}
       </div>
     </div>
   );

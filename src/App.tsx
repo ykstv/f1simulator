@@ -2,15 +2,18 @@ import { useState, useEffect } from 'react';
 import { ResultsBar } from './components/ResultsBar';
 import { RaceColumn } from './components/RaceColumn';
 import { Footer } from './components/Footer';
+import { ShareModal } from './components/ShareModal';
 import { RACES } from './constants';
 import { ChampionshipState, DriverName, RaceResult } from './types';
 import { calculateAllDriverPoints } from './utils/points';
 import { getInitialState, saveToLocalStorage } from './utils/storage';
+import { generateShareUrl } from './utils/shareUrl';
 
 function App() {
   const [state, setState] = useState<ChampionshipState>(getInitialState());
   const [isMobile, setIsMobile] = useState(false);
   const [isPortrait, setIsPortrait] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -57,6 +60,12 @@ function App() {
 
   const driverStandings = calculateAllDriverPoints(state.raceResults);
 
+  const handleShareClick = () => {
+    setShowShareModal(true);
+  };
+
+  const shareUrl = generateShareUrl(state.raceResults);
+
   if (isMobile && isPortrait) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-8">
@@ -72,7 +81,11 @@ function App() {
   return (
     <div className={`min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 ${isMobile ? 'p-2 pb-4' : 'p-8 pb-32'}`}>
       <div className="max-w-[1800px] mx-auto">
-        <ResultsBar drivers={driverStandings} isMobile={isMobile} />
+        <ResultsBar
+          drivers={driverStandings}
+          isMobile={isMobile}
+          onShareClick={!isMobile ? handleShareClick : undefined}
+        />
 
         <div className={`bg-white rounded-lg shadow-md ${isMobile ? 'p-2' : 'p-6'}`}>
           <div className={isMobile ? '' : 'overflow-x-auto'}>
@@ -91,6 +104,9 @@ function App() {
         </div>
       </div>
       <Footer isMobile={isMobile} />
+      {showShareModal && (
+        <ShareModal url={shareUrl} onClose={() => setShowShareModal(false)} />
+      )}
     </div>
   );
 }

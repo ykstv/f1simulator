@@ -1,14 +1,15 @@
-import { STORAGE_KEY, RACES, DRIVERS } from '../constants';
+import { STORAGE_KEY, RACES } from '../constants';
 import { ChampionshipState, RaceResult } from '../types';
+import { loadFromUrl } from './shareUrl';
 
 export function getDefaultRaceResults(): RaceResult {
   const results: RaceResult = {};
 
   RACES.forEach(race => {
     results[race.id] = {
-      'Oscar': 1,
+      'Max': 1,
       'Lando': 2,
-      'Max': 3,
+      'Oscar': 3,
     };
   });
 
@@ -36,6 +37,13 @@ export function loadFromLocalStorage(): ChampionshipState | null {
 }
 
 export function getInitialState(): ChampionshipState {
+  const urlResults = loadFromUrl();
+  if (urlResults) {
+    return {
+      raceResults: urlResults,
+    };
+  }
+
   const saved = loadFromLocalStorage();
   if (saved) {
     return saved;
