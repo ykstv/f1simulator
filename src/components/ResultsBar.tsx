@@ -44,6 +44,15 @@ export function ResultsBar({ drivers, isMobile = false, onShareClick }: ResultsB
                 </div>
               );
             })}
+            {onShareClick && (
+              <button
+                onClick={onShareClick}
+                className="flex items-center justify-center gap-1 px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors whitespace-nowrap"
+              >
+                <Share2 size={14} />
+                <span className="text-xs font-semibold">Share</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

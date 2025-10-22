@@ -84,7 +84,7 @@ function App() {
         <ResultsBar
           drivers={driverStandings}
           isMobile={isMobile}
-          onShareClick={!isMobile ? handleShareClick : undefined}
+          onShareClick={handleShareClick}
         />
 
         <div className={`bg-white rounded-lg shadow-md ${isMobile ? 'p-2' : 'p-6'}`}>
