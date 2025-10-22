@@ -54,7 +54,7 @@ export function ResultsBar({ drivers, isMobile = false, onShare }: ResultsBarPro
           </div>
           <button
             onClick={handleShare}
-            className="flex items-center gap-1 px-2 py-1 text-xs font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-md transition-all duration-150 whitespace-nowrap shadow-sm"
+            className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-150 whitespace-nowrap"
             title="Share scenario"
           >
             <Share2 size={12} />
@@ -102,7 +102,7 @@ export function ResultsBar({ drivers, isMobile = false, onShare }: ResultsBarPro
         </div>
         <button
           onClick={handleShare}
-          className="flex items-center gap-2 px-4 py-3 text-base font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 whitespace-nowrap"
+          className="flex items-center gap-2 px-4 py-3 text-base font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-150 whitespace-nowrap"
           title="Share scenario"
         >
           <Share2 size={18} />
