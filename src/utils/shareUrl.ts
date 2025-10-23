@@ -1,5 +1,5 @@
 import { RaceResult, DriverName } from '../types';
-import { RACES } from '../constants';
+import { RACES, LOCKED_RACE_RESULTS } from '../constants';
 
 const DRIVER_ORDER: DriverName[] = ['Max', 'Lando', 'Oscar'];
 const BASE_URL = 'https://ykstv.com/';
@@ -38,10 +38,14 @@ export function decodeUrlParameter(urlParam: string): RaceResult | null {
         throw new Error('Invalid positions');
       }
 
-      results[race.id] = {};
-      DRIVER_ORDER.forEach((driver, driverIndex) => {
-        results[race.id][driver] = positions[driverIndex];
-      });
+      if (race.locked && LOCKED_RACE_RESULTS[race.id]) {
+        results[race.id] = { ...LOCKED_RACE_RESULTS[race.id] };
+      } else {
+        results[race.id] = {};
+        DRIVER_ORDER.forEach((driver, driverIndex) => {
+          results[race.id][driver] = positions[driverIndex];
+        });
+      }
     });
 
     return results;
