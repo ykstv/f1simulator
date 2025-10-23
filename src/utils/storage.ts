@@ -1,4 +1,4 @@
-import { STORAGE_KEY, RACES } from '../constants';
+import { STORAGE_KEY, RACES, LOCKED_RACE_RESULTS } from '../constants';
 import { ChampionshipState, RaceResult } from '../types';
 import { loadFromUrl } from './shareUrl';
 
@@ -40,16 +40,28 @@ export function getInitialState(): ChampionshipState {
   const urlResults = loadFromUrl();
   if (urlResults) {
     return {
-      raceResults: urlResults,
+      raceResults: applyLockedResults(urlResults),
     };
   }
 
   const saved = loadFromLocalStorage();
   if (saved) {
-    return saved;
+    return {
+      raceResults: applyLockedResults(saved.raceResults),
+    };
   }
 
   return {
-    raceResults: getDefaultRaceResults(),
+    raceResults: applyLockedResults(getDefaultRaceResults()),
   };
+}
+
+function applyLockedResults(results: RaceResult): RaceResult {
+  const newResults = { ...results };
+
+  Object.keys(LOCKED_RACE_RESULTS).forEach(raceId => {
+    newResults[raceId] = { ...LOCKED_RACE_RESULTS[raceId] };
+  });
+
+  return newResults;
 }

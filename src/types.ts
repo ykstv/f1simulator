@@ -12,6 +12,7 @@ export interface Race {
   id: string;
   name: string;
   type: RaceType;
+  locked?: boolean;
 }
 
 export interface RaceResult {

@@ -7,7 +7,7 @@ export const DRIVERS: Driver[] = [
 ];
 
 export const RACES: Race[] = [
-  { id: 'mexico', name: 'MEXICO', type: 'regular' },
+  { id: 'mexico', name: 'MEXICO', type: 'regular', locked: true },
   { id: 'brazil-sprint', name: 'BRAZIL (SPRINT)', type: 'sprint' },
   { id: 'brazil', name: 'BRAZIL', type: 'regular' },
   { id: 'las-vegas', name: 'LAS VEGAS', type: 'regular' },
@@ -43,3 +43,11 @@ export const SPRINT_RACE_POINTS: { [position: number]: number } = {
 export const GRID_POSITIONS = 13;
 
 export const STORAGE_KEY = 'f1-championship-simulator';
+
+export const LOCKED_RACE_RESULTS: { [raceId: string]: { [driverName: string]: number } } = {
+  mexico: {
+    Max: 4,
+    Oscar: 5,
+    Lando: 6,
+  },
+};

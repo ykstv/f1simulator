@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Race, DriverName, RaceResult } from '../types';
-import { DRIVERS, GRID_POSITIONS } from '../constants';
+import { DRIVERS, GRID_POSITIONS, LOCKED_RACE_RESULTS } from '../constants';
 import { DriverTile } from './DriverTile';
 import { getPointsForPosition } from '../utils/points';
 
@@ -22,7 +22,10 @@ export function RaceColumn({ race, raceResults, onPositionChange, isMobile = fal
     fromPosition: number;
   } | null>(null);
 
-  const currentResults = raceResults[race.id] || {};
+  const isLocked = race.locked === true;
+  const currentResults = isLocked && LOCKED_RACE_RESULTS[race.id]
+    ? LOCKED_RACE_RESULTS[race.id]
+    : raceResults[race.id] || {};
 
   const getDriverAtPosition = (position: number): DriverName | null => {
     for (const driverName of Object.keys(currentResults)) {
@@ -34,6 +37,7 @@ export function RaceColumn({ race, raceResults, onPositionChange, isMobile = fal
   };
 
   const handleDragStart = (driverName: DriverName, fromPosition: number) => {
+    if (isLocked) return;
     setDraggedDriver({ name: driverName, fromPosition });
   };
 
@@ -55,6 +59,8 @@ export function RaceColumn({ race, raceResults, onPositionChange, isMobile = fal
   const handleDrop = (e: React.DragEvent, toPosition: number) => {
     e.preventDefault();
     setDragOverPosition(null);
+
+    if (isLocked) return;
 
     try {
       const data = JSON.parse(e.dataTransfer.getData('text/plain'));
@@ -78,7 +84,7 @@ export function RaceColumn({ race, raceResults, onPositionChange, isMobile = fal
   };
 
   const handleMobileTap = (position: number) => {
-    if (!isMobile) return;
+    if (!isMobile || isLocked) return;
 
     const driverAtPosition = getDriverAtPosition(position);
 
@@ -121,7 +127,7 @@ export function RaceColumn({ race, raceResults, onPositionChange, isMobile = fal
 
   if (isMobile) {
     return (
-      <div className="bg-white rounded shadow-sm flex-1 min-w-0">
+      <div className={`bg-white rounded shadow-sm flex-1 min-w-0 ${isLocked ? 'opacity-50' : ''}`}>
         <h2 className="text-center font-bold text-[10px] py-1 border-b border-gray-200">
           {getAbbreviatedName(race.name)}
         </h2>
@@ -136,7 +142,9 @@ export function RaceColumn({ race, raceResults, onPositionChange, isMobile = fal
               <div
                 key={position}
                 onClick={() => handleMobileTap(position)}
-                className={`flex items-center gap-[2px] min-h-[24px] rounded transition-all cursor-pointer ${
+                className={`flex items-center gap-[2px] min-h-[24px] rounded transition-all ${
+                  isLocked ? 'cursor-not-allowed' : 'cursor-pointer'
+                } ${
                   isSelected ? 'ring-2 ring-blue-500' : ''
                 }`}
               >
@@ -165,7 +173,7 @@ export function RaceColumn({ race, raceResults, onPositionChange, isMobile = fal
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 min-w-[180px]">
+    <div className={`bg-white rounded-lg shadow-md p-4 min-w-[180px] ${isLocked ? 'opacity-50' : ''}`}>
       <h2 className="text-center font-bold text-sm mb-4 pb-2 border-b-2 border-gray-200">
         {race.name}
       </h2>
@@ -180,12 +188,14 @@ export function RaceColumn({ race, raceResults, onPositionChange, isMobile = fal
           return (
             <div
               key={position}
-              onDragOver={(e) => handleDragOver(e, position)}
+              onDragOver={(e) => !isLocked && handleDragOver(e, position)}
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, position)}
               className={`flex items-center gap-2 min-h-[40px] rounded transition-all ${
-                isDraggedOver ? 'bg-blue-100 ring-2 ring-blue-400' : ''
-              } ${isBeingDragged ? 'opacity-50' : ''}`}
+                isDraggedOver && !isLocked ? 'bg-blue-100 ring-2 ring-blue-400' : ''
+              } ${isBeingDragged ? 'opacity-50' : ''} ${
+                isLocked ? 'cursor-not-allowed' : ''
+              }`}
             >
               <div className="w-6 text-center text-sm font-medium text-gray-600">
                 {position}
@@ -200,6 +210,7 @@ export function RaceColumn({ race, raceResults, onPositionChange, isMobile = fal
                     raceId={race.id}
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
+                    locked={isLocked}
                   />
                 ) : (
                   <div className="h-[36px] bg-gray-100 rounded"></div>

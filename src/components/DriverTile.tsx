@@ -9,6 +9,7 @@ interface DriverTileProps {
   raceId: string;
   onDragStart: (driverName: DriverName, position: number) => void;
   onDragEnd: () => void;
+  locked?: boolean;
 }
 
 export function DriverTile({
@@ -19,8 +20,13 @@ export function DriverTile({
   raceId,
   onDragStart,
   onDragEnd,
+  locked = false,
 }: DriverTileProps) {
   const handleDragStart = (e: React.DragEvent) => {
+    if (locked) {
+      e.preventDefault();
+      return;
+    }
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', JSON.stringify({ driverName, fromPosition: position, raceId }));
     onDragStart(driverName, position);
@@ -28,10 +34,12 @@ export function DriverTile({
 
   return (
     <div
-      draggable
+      draggable={!locked}
       onDragStart={handleDragStart}
       onDragEnd={onDragEnd}
-      className="flex items-center justify-between px-4 py-2 rounded cursor-move hover:opacity-80 transition-opacity"
+      className={`flex items-center justify-between px-4 py-2 rounded transition-opacity ${
+        locked ? 'cursor-not-allowed' : 'cursor-move hover:opacity-80'
+      }`}
       style={{ backgroundColor: color }}
     >
       <span className="font-semibold text-gray-900">{driverName.toUpperCase()}</span>
