@@ -46,8 +46,8 @@ export const STORAGE_KEY = 'f1-championship-simulator';
 
 export const LOCKED_RACE_RESULTS: { [raceId: string]: { [driverName: string]: number } } = {
   mexico: {
-    Max: 4,
+    Lando: 1,
+    Max: 3,
     Oscar: 5,
-    Lando: 6,
   },
 };
