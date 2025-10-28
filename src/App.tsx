@@ -68,9 +68,6 @@ function App() {
   const driverStandings = calculateAllDriverPoints(state.raceResults);
 
   const handleShareClick = () => {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'share_click');
-    }
     setShowShareModal(true);
   };
 
