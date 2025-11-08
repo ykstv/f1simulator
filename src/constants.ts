@@ -8,7 +8,7 @@ export const DRIVERS: Driver[] = [
 
 export const RACES: Race[] = [
   { id: 'mexico', name: 'MEXICO', type: 'regular', locked: true },
-  { id: 'brazil-sprint', name: 'BRAZIL (SPRINT)', type: 'sprint' },
+  { id: 'brazil-sprint', name: 'BRAZIL (SPRINT)', type: 'sprint', locked: true },
   { id: 'brazil', name: 'BRAZIL', type: 'regular' },
   { id: 'las-vegas', name: 'LAS VEGAS', type: 'regular' },
   { id: 'qatar-sprint', name: 'QATAR (SPRINT)', type: 'sprint' },
@@ -49,5 +49,10 @@ export const LOCKED_RACE_RESULTS: { [raceId: string]: { [driverName: string]: nu
     Lando: 1,
     Max: 3,
     Oscar: 5,
+  },
+  'brazil-sprint': {
+    Lando: 1,
+    Max: 4,
+    Oscar: 13,
   },
 };
