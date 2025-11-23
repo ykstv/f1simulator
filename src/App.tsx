@@ -9,6 +9,7 @@ import { ChampionshipState, DriverName, RaceResult } from './types';
 import { calculateAllDriverPoints } from './utils/points';
 import { getInitialState, saveToLocalStorage } from './utils/storage';
 import { generateShareUrl } from './utils/shareUrl';
+import { trackPageView } from './utils/analytics';
 
 function App() {
   const [state, setState] = useState<ChampionshipState>(getInitialState());
@@ -16,6 +17,10 @@ function App() {
   const [isPortrait, setIsPortrait] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  useEffect(() => {
+    trackPageView();
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => {

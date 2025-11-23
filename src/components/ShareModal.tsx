@@ -1,5 +1,6 @@
 import { X, Copy } from 'lucide-react';
 import { copyToClipboard } from '../utils/clipboard';
+import { trackShareClick } from '../utils/analytics';
 
 interface ShareModalProps {
   url: string;
@@ -10,6 +11,7 @@ interface ShareModalProps {
 
 export function ShareModal({ url, onClose, onCopySuccess, onCopyError }: ShareModalProps) {
   const handleCopy = async () => {
+    trackShareClick();
     const success = await copyToClipboard(url);
 
     if (success) {
