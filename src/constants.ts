@@ -62,7 +62,7 @@ export const LOCKED_RACE_RESULTS: { [raceId: string]: { [driverName: string]: nu
   },
   'las-vegas': {
     Max: 1,
-    Lando: 2,
-    Oscar: 4,
+    Lando: 12,
+    Oscar: 13,
   },
 };
