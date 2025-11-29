@@ -11,7 +11,7 @@ export const RACES: Race[] = [
   { id: 'brazil-sprint', name: 'BRAZIL (SPRINT)', type: 'sprint', locked: true },
   { id: 'brazil', name: 'BRAZIL', type: 'regular', locked: true },
   { id: 'las-vegas', name: 'LAS VEGAS', type: 'regular', locked: true },
-  { id: 'qatar-sprint', name: 'QATAR (SPRINT)', type: 'sprint' },
+  { id: 'qatar-sprint', name: 'QATAR (SPRINT)', type: 'sprint', locked: true },
   { id: 'qatar', name: 'QATAR', type: 'regular' },
   { id: 'abu-dhabi', name: 'ABU DHABI', type: 'regular' },
 ];
@@ -64,5 +64,10 @@ export const LOCKED_RACE_RESULTS: { [raceId: string]: { [driverName: string]: nu
     Max: 1,
     Lando: 12,
     Oscar: 13,
+  },
+  'qatar-sprint': {
+    Oscar: 1,
+    Lando: 3,
+    Max: 4,
   },
 };
