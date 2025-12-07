@@ -7,13 +7,13 @@ export const DRIVERS: Driver[] = [
 ];
 
 export const RACES: Race[] = [
-  { id: 'mexico', name: 'MEXICO', type: 'regular', locked: true },
-  { id: 'brazil-sprint', name: 'BRAZIL (SPRINT)', type: 'sprint', locked: true },
-  { id: 'brazil', name: 'BRAZIL', type: 'regular', locked: true },
-  { id: 'las-vegas', name: 'LAS VEGAS', type: 'regular', locked: true },
-  { id: 'qatar-sprint', name: 'QATAR (SPRINT)', type: 'sprint', locked: true },
-  { id: 'qatar', name: 'QATAR', type: 'regular', locked: true },
-  { id: 'abu-dhabi', name: 'ABU DHABI', type: 'regular', locked: true },
+  { id: 'mexico', name: 'MEXICO', type: 'regular' },
+  { id: 'brazil-sprint', name: 'BRAZIL (SPRINT)', type: 'sprint' },
+  { id: 'brazil', name: 'BRAZIL', type: 'regular' },
+  { id: 'las-vegas', name: 'LAS VEGAS', type: 'regular' },
+  { id: 'qatar-sprint', name: 'QATAR (SPRINT)', type: 'sprint' },
+  { id: 'qatar', name: 'QATAR', type: 'regular' },
+  { id: 'abu-dhabi', name: 'ABU DHABI', type: 'regular' },
 ];
 
 export const REGULAR_RACE_POINTS: { [position: number]: number } = {

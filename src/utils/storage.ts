@@ -6,11 +6,15 @@ export function getDefaultRaceResults(): RaceResult {
   const results: RaceResult = {};
 
   RACES.forEach(race => {
-    results[race.id] = {
-      'Max': 1,
-      'Lando': 2,
-      'Oscar': 3,
-    };
+    if (LOCKED_RACE_RESULTS[race.id]) {
+      results[race.id] = { ...LOCKED_RACE_RESULTS[race.id] };
+    } else {
+      results[race.id] = {
+        'Max': 1,
+        'Lando': 2,
+        'Oscar': 3,
+      };
+    }
   });
 
   return results;
@@ -40,28 +44,18 @@ export function getInitialState(): ChampionshipState {
   const urlResults = loadFromUrl();
   if (urlResults) {
     return {
-      raceResults: applyLockedResults(urlResults),
+      raceResults: urlResults,
     };
   }
 
   const saved = loadFromLocalStorage();
   if (saved) {
     return {
-      raceResults: applyLockedResults(saved.raceResults),
+      raceResults: saved.raceResults,
     };
   }
 
   return {
-    raceResults: applyLockedResults(getDefaultRaceResults()),
+    raceResults: getDefaultRaceResults(),
   };
-}
-
-function applyLockedResults(results: RaceResult): RaceResult {
-  const newResults = { ...results };
-
-  Object.keys(LOCKED_RACE_RESULTS).forEach(raceId => {
-    newResults[raceId] = { ...LOCKED_RACE_RESULTS[raceId] };
-  });
-
-  return newResults;
 }

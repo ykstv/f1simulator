@@ -49,11 +49,6 @@ function App() {
     driverName: DriverName,
     newPosition: number | null
   ) => {
-    const race = RACES.find(r => r.id === raceId);
-    if (race?.locked) {
-      return;
-    }
-
     setState(prevState => {
       const newRaceResults: RaceResult = {
         ...prevState.raceResults,
